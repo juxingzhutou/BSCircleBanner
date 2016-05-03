@@ -28,6 +28,7 @@ typedef NS_ENUM(NSInteger, BSCircleBannerType) {
 
 @optional
 - (void)BSCircleBanner:(BSCircleBanner *)bannerView didTappedAtIndexPath:(NSIndexPath *)indexPath;
+- (void)BSCircleBanner:(BSCircleBanner *)bannerView didScrollToPage:(NSInteger)pageIndex;
 
 @end
 
@@ -42,6 +43,10 @@ typedef NS_ENUM(NSInteger, BSCircleBannerType) {
 @property (nonatomic, weak) UICollectionView        *collectionView;
 @property (nonatomic, weak) UIPageControl           *pageControl;
 
+@property (nonatomic, assign) CGFloat autoScrollInterval;
+
 - (void)reloadData;
+- (void)fireAutoScrollTimer;
+- (void)invalidateAutoScrollTimer;
 
 @end

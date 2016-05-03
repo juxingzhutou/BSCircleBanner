@@ -13,8 +13,6 @@
 
 #define TOP_BANNER_CELL_REUSE_ID @"TOP_BANNER_CELL_REUSE_ID"
 
-#define AUTO_SCROLL_TIMER_TIME_INTERVAL     4.0
-
 #define COLLECTION_SECTION_HORIZONTAL_INSET ((self.bounds.size.width - self.bannerSize.width) / 2)
 #define CURRENT_PAGE    floor((self.collectionView.contentOffset.x + self.bounds.size.width/2 - COLLECTION_SECTION_HORIZONTAL_INSET) / self.bannerSize.width)
 
@@ -56,6 +54,8 @@ static BOOL isStopOnFirstPage = NO, isStopOnLastPage = NO;
 }
 
 - (void)intializer {
+    _autoScrollInterval = 4.0;
+    
     UICollectionViewFlowLayout *layout = [self getLayoutForType:self.type];
     UICollectionView *collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
     
@@ -133,6 +133,9 @@ static BOOL isStopOnFirstPage = NO, isStopOnLastPage = NO;
         
         page = CURRENT_PAGE;
         self.pageControl.currentPage = page > 0 ? page - 1 : self.bannerCount - 2;
+        if ([self.delegate respondsToSelector:@selector(BSCircleBanner:didScrollToPage:)]) {
+            [self.delegate BSCircleBanner:self didScrollToPage:self.pageControl.currentPage];
+        }
     }
     
     if (scrollView.decelerating) {
@@ -168,6 +171,12 @@ static BOOL isStopOnFirstPage = NO, isStopOnLastPage = NO;
 }
 
 #pragma mark - Accessors
+
+- (void)setAutoScrollInterval:(CGFloat)autoScrollInterval {
+    _autoScrollInterval = autoScrollInterval;
+    [self invalidateAutoScrollTimer];
+    [self fireAutoScrollTimer];
+}
 
 - (void)setType:(BSCircleBannerType)type {
     _type = type;
@@ -214,14 +223,12 @@ static BOOL isStopOnFirstPage = NO, isStopOnLastPage = NO;
     }
 }
 
-#pragma mark - Internal Methods
-
 - (void)fireAutoScrollTimer {
     if (self.bannerCount <= 1 || self.autoScrollTimer) {
         return;
     }
     
-    self.autoScrollTimer = [NSTimer scheduledTimerWithTimeInterval:AUTO_SCROLL_TIMER_TIME_INTERVAL target:self selector:@selector(scrollBanner:) userInfo:nil repeats:YES];
+    self.autoScrollTimer = [NSTimer scheduledTimerWithTimeInterval:self.autoScrollInterval target:self selector:@selector(scrollBanner:) userInfo:nil repeats:YES];
 }
 
 - (void)invalidateAutoScrollTimer {
