@@ -31,20 +31,11 @@ static BOOL isStopOnFirstPage = NO, isStopOnLastPage = NO;
 @implementation BSCircleBanner
 
 - (instancetype)initWithType:(BSCircleBannerType)type {
+    _type = type;
     self = [super init];
     if (self) {
-        _type = type;
-        [self intializer];
+        
     }
-    return self;
-}
-
-- (instancetype)init {
-    self = [super init];
-    if (self) {
-        [self intializer];
-    }
-    
     return self;
 }
 

@@ -23,14 +23,6 @@
     return self;
 }
 
-- (instancetype)init {
-    self = [super init];
-    if (self) {
-        [self intializer];
-    }
-    return self;
-}
-
 - (void)prepareForReuse {
     [super prepareForReuse];
     
