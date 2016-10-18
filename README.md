@@ -1,3 +1,5 @@
+云课堂昵称: 巨型猪头
+
 # BSCircleBanner
 
 A circle scroll view for iOS.
